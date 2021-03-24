@@ -8,11 +8,13 @@ import { Product, ProductsService} from '../products.service';
   styleUrls: ['./product-list.component.css']
 })
 export class ProductListComponent implements OnInit {
-  @Input() products!: Array<Product>
+  products!: Array<Product>
 
   constructor(
-    public productsService: ProductsService,
-  ) {}
+    private productsService: ProductsService,
+  ) {
+    productsService.initialise().then(products => this.products = products);
+  }
   ngOnInit(): void {}
   share(product: Product): void {
     window.alert(`The ${product.name} has been shared!`);
