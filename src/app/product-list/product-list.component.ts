@@ -13,7 +13,7 @@ export class ProductListComponent implements OnInit {
   constructor(
     private productsService: ProductsService,
   ) {
-    productsService.initialise().then(products => this.products = products);
+    productsService.initialise().then(products => productsService.addProducts(this.products = ([] as Array<Product>).concat(products)));
   }
   ngOnInit(): void {}
   share(product: Product): void {

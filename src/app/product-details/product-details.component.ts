@@ -10,13 +10,13 @@ import { ProductsService, Product } from '../products.service';
   styleUrls: ['./product-details.component.css']
 })
 export class ProductDetailsComponent implements OnInit {
-  product?:Product;
+  product!:Product;
 
   constructor(
     private route: ActivatedRoute,
     private cartService: CartService,
     private productsService: ProductsService,
-  ) { }
+  ) {}
 
   ngOnInit(): void {
     // get product id from current route
@@ -24,7 +24,10 @@ export class ProductDetailsComponent implements OnInit {
     const productIdFromRoute = Number(routeParams.get('productId'));
 
     // find corresponding product from route
-    this.product = this.productsService.getProduct({id: productIdFromRoute}) as Product;
+    this.productsService.initialise().then(products => {
+      this.productsService.addProducts(products);
+      this.product = this.productsService.getProduct({id: productIdFromRoute}) as Product;
+    });
   }
   addToCart(product: Product): void {
     this.cartService.addItem(product);

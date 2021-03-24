@@ -19,27 +19,25 @@ export class ProductsService {
 
  constructor(
    private http: HttpClient,
- ) {
-   this.initialise();
- }
- async initialise() {
-  this.products = await this.http.get<Array<Product>>('/assets/products.json').toPromise();
-  var products:Array<Product> = ([] as Array<Product>).concat(this.products);
-   return products
+ ) {}
+ initialise() {
+   return this.http.get<Array<Product>>('/assets/products.json').toPromise(); 
  }
  addProduct(product:Product): void {
-   this.products.push(product)
+  this.products ? this.products.push(product) : (this.products = ([] as Array<Product>)).push(product);
  }
  addProducts(products: Array<Product>): void {
-   this.products = this.products.concat(products);
+   this.products = this.products ? this.products.concat(products) : ([] as Array<Product>).concat(this.products);
  }
  getProduct(product: any): Product | undefined {
      const {id, name, price, description} = product;
      
-     if (typeof id === 'number') return this.products.find((product: Product) => product.id === id);
-     if (typeof name === 'string') return this.products.find((product: Product) => product.name === name);
-     if (typeof price === 'number') return this.products.find((product: Product) => product.price === price);
-     if (typeof description === 'string') return this.products.find((product: Product) => product.description === description);
+     if (this.products) {
+      if (typeof id === 'number') return this.products.find((product: Product) => product.id === id);
+      if (typeof name === 'string') return this.products.find((product: Product) => product.name === name);
+      if (typeof price === 'number') return this.products.find((product: Product) => product.price === price);
+      if (typeof description === 'string') return this.products.find((product: Product) => product.description === description);
+     }
      return undefined;
  }
  getProducts(): Array<Product> {
@@ -64,7 +62,7 @@ export class ProductsService {
    return undefined;
  }
  removeProducts(): Array<Product> {
-  var products:Array<Product> = ([] as Array<Product>).concat(this.products);;
+  var products:Array<Product> = ([] as Array<Product>).concat(this.products);
 
   this.products = [];
   return products;
